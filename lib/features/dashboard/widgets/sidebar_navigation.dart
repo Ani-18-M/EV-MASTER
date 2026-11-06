@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/services/auth_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ev_logo.dart';
 import '../../auth/screens/login_screen.dart';
@@ -151,22 +152,28 @@ class SidebarNavigation extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 16),
             child: _LogoutButton(
               isCollapsed: isCollapsed,
-              onTap: () => Navigator.pushAndRemoveUntil(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, anim, secAnim) => const LoginScreen(),
-                  transitionDuration: const Duration(milliseconds: 350),
-                  transitionsBuilder: (context, anim, secAnim, child) =>
-                      FadeTransition(
-                        opacity: CurvedAnimation(
-                          parent: anim,
-                          curve: Curves.easeOutCubic,
-                        ),
-                        child: child,
-                      ),
-                ),
-                (route) => false,
-              ),
+              onTap: () async {
+                await AuthService().signOut();
+                if (context.mounted) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, anim, secAnim) =>
+                          const LoginScreen(),
+                      transitionDuration: const Duration(milliseconds: 350),
+                      transitionsBuilder: (context, anim, secAnim, child) =>
+                          FadeTransition(
+                            opacity: CurvedAnimation(
+                              parent: anim,
+                              curve: Curves.easeOutCubic,
+                            ),
+                            child: child,
+                          ),
+                    ),
+                    (route) => false,
+                  );
+                }
+              },
             ),
           ),
         ],
