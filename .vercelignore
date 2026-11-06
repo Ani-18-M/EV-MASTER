@@ -1,0 +1,12 @@
+# Files and directories ignored by Vercel CLI upload
+android/
+ios/
+linux/
+macos/
+windows/
+test/
+.dart_tool/
+.idea/
+.git/
+*.apk
+*.aab
